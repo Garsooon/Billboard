@@ -1,0 +1,24 @@
+name: Billboard
+version: 1.0
+author: Garsooon
+main: org.garsooon.billboard.billboard
+commands:
+  buyad:
+    description: Request an ad slot
+    usage: /<command> <duration_minutes> <message>
+  reviewads:
+    description: Review pending ads
+    permission: billboard.moderate
+  approvead:
+    description: Approve an ad
+    permission: billboard.moderate
+  denyad:
+    description: Deny an ad
+    permission: billboard.moderate
+  listads:
+    description: List active ads
+    permission: billboard.moderate
+permissions:
+  billboard.moderate:
+    description: Allows moderating ads
+    default: op
