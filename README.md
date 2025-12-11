@@ -1,4 +1,4 @@
-# Auctioneer
+# Billboard
 
 [![GitHub Release](https://img.shields.io/github/v/release/Garsooon/Billboard?label=release)](https://github.com/Garsooon/Billboard/releases/latest)  
 [![Downloads](https://img.shields.io/github/downloads/Garsooon/Billboard/total.svg?style=flat)](https://github.com/Garsooon/Billboard/releases)  
