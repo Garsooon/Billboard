@@ -8,15 +8,6 @@
 
 ---
 
-## Features
-
-- Start auctions with `/auction <price>`
-- Live bidding through chat
-- Configurable auction time, bid time increases and item blacklist
-- Optional minimum bid increase (after first bid)
-
----
-
 ## Requirements
 
 - [Project Poseidon](https://github.com/retromcorg/Project-Poseidon)
