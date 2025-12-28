@@ -3,6 +3,7 @@ package org.garsooon.billboard;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.garsooon.billboard.commands.AdCommands;
 import org.garsooon.billboard.data.AdManager;
+import org.garsooon.billboard.data.AutoBroadcaster;
 import org.garsooon.billboard.data.ConfigManager;
 import org.garsooon.billboard.listeners.PlayerJoinListener;
 
@@ -12,6 +13,7 @@ public class billboard extends JavaPlugin {
 
     private AdManager adManager;
     private ConfigManager configManager;
+    private AutoBroadcaster autobroadcaster;
     private int broadcastTaskId;
     private int tickTaskId;
 
@@ -35,18 +37,27 @@ public class billboard extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
 
-        // Start broadcast task
+        // Start broadcast task for ads
         long interval = configManager.getBroadcastInterval() * 20L;
         broadcastTaskId = getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> adManager.broadcastRandomAd(getServer(), configManager), interval, interval);
 
         // Start tick task to remove expired ads (checks every 5 minutes)
         tickTaskId = getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> adManager.removeExpiredAds(getLogger()), 6000L, 6000L);
+
+        // Start broadcast task for server broadcasts
+        autobroadcaster = new AutoBroadcaster(this, configManager);
+        autobroadcaster.start();
     }
 
     @Override
     public void onDisable() {
         getServer().getScheduler().cancelTask(broadcastTaskId);
         getServer().getScheduler().cancelTask(tickTaskId);
+
+        if (autobroadcaster != null) {
+            autobroadcaster.stop();
+        }
+
         adManager.saveData();
         getLogger().info("[Billboard] has been disabled!");
     }
@@ -57,5 +68,9 @@ public class billboard extends JavaPlugin {
 
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public AutoBroadcaster getAutobroadcaster() {
+        return autobroadcaster;
     }
 }

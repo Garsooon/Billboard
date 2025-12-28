@@ -4,7 +4,9 @@ import org.garsooon.billboard.billboard;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ConfigManager {
@@ -18,6 +20,10 @@ public class ConfigManager {
     private String broadcastHeader = "&6[AD]";
     private int maxDurationDays = 30;
     private int maxMessageLength = 100;
+
+    // AutoBroadcaster settings
+    private int autobroadcastInterval = 300;
+    private List<String> autobroadcastMessages = new ArrayList<>();
 
     public ConfigManager(billboard plugin) {
         this.plugin = plugin;
@@ -48,6 +54,10 @@ public class ConfigManager {
         broadcastHeader = getString(broadcastHeader);
         maxDurationDays = getInt("max-duration-days", maxDurationDays);
         maxMessageLength = getInt("max-message-length", maxMessageLength);
+
+        autobroadcastInterval = getInt("autobroadcast.interval", autobroadcastInterval);
+        autobroadcastMessages = getStringList(getDefaultAutobroadcastMessages());
+
         plugin.getServer().getLogger().info("[Billboard] Configuration loaded successfully");
     }
 
@@ -57,10 +67,24 @@ public class ConfigManager {
         config.put("max-duration-days", maxDurationDays);
         config.put("max-message-length", maxMessageLength);
 
+        Map<String, Object> autobroadcast = new HashMap<>();
+        autobroadcast.put("interval", autobroadcastInterval);
+        autobroadcast.put("messages", getDefaultAutobroadcastMessages());
+        config.put("autobroadcast", autobroadcast);
+
         saveYamlFile(configFile, config);
         plugin.getServer().getLogger().info("[Billboard] Created default config.yml");
     }
 
+    private List<String> getDefaultAutobroadcastMessages() {
+        List<String> defaults = new ArrayList<>();
+        defaults.add("&cIf your seeing this, The server owners forgot to set up broadcasts *skull*");
+        defaults.add("&eWelcome to the server! Type /help for commands.");
+        defaults.add("&bDon't forget to vote for the server daily!");
+        defaults.add("&aVisit our website at example.com");
+        defaults.add("&6Use /buyad to advertise your shop or service!");
+        return defaults;
+    }
 
     private String getString(String defaultValue) {
         if (config.containsKey("broadcast-header")) {
@@ -82,6 +106,30 @@ public class ConfigManager {
         return defaultValue;
     }
 
+    private List<String> getStringList(List<String> defaultValue) {
+        String[] keys = "autobroadcast.messages".split("\\.");
+        Object current = config;
+
+        for (String k : keys) {
+            if (current instanceof Map) {
+                current = ((Map<?, ?>) current).get(k);
+            } else {
+                return defaultValue;
+            }
+        }
+
+        if (current instanceof List) {
+            List<String> result = new ArrayList<>();
+            for (Object item : (List<?>) current) {
+                if (item instanceof String) {
+                    result.add((String) item);
+                }
+            }
+            return result;
+        }
+        return defaultValue;
+    }
+
     public int getBroadcastInterval() {
         return broadcastInterval;
     }
@@ -96,6 +144,14 @@ public class ConfigManager {
 
     public int getMaxMessageLength() {
         return maxMessageLength;
+    }
+
+    public int getAutobroadcastInterval() {
+        return autobroadcastInterval;
+    }
+
+    public List<String> getAutobroadcastMessages() {
+        return new ArrayList<>(autobroadcastMessages);
     }
 
     ///util
