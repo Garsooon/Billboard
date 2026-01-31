@@ -91,8 +91,10 @@ public class AdCommands implements CommandExecutor {
             }
         }
 
-        AdRequest request = new AdRequest(player.getName(), message, duration);
-        adManager.addPendingAd(request);
+        if (!adManager.submitAd(player, message, duration)) {
+            player.sendMessage(ChatColor.RED + "You do not have enough money to buy this ad.");
+            return true;
+        }
 
         player.sendMessage(ChatColor.GREEN + "Ad submitted for approval!");
         player.sendMessage(ChatColor.YELLOW + "Message: " + ChatColor.WHITE +

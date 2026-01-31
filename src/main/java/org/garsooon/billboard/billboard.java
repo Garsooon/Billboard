@@ -1,6 +1,8 @@
 package org.garsooon.billboard;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.garsooon.billboard.Economy.Method;
+import org.garsooon.billboard.Economy.Methods;
 import org.garsooon.billboard.commands.AdCommands;
 import org.garsooon.billboard.data.AdManager;
 import org.garsooon.billboard.data.AutoBroadcaster;
@@ -16,6 +18,7 @@ public class billboard extends JavaPlugin {
     private AutoBroadcaster autobroadcaster;
     private int broadcastTaskId;
     private int tickTaskId;
+    private Method economy;
 
     @Override
     public void onEnable() {
@@ -24,7 +27,17 @@ public class billboard extends JavaPlugin {
 
         getLogger().info("[Billboard] has been enabled!");
 
-        adManager = new AdManager(this, configManager);
+        boolean economyLoaded = Methods.setMethod(getServer().getPluginManager());
+        if (!economyLoaded || Methods.getMethod() == null) {
+            getLogger().severe("[Billboard] No compatible economy plugin found! Disabling plugin.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        this.economy = Methods.getMethod();
+        getLogger().info("[Billboard] Economy method loaded: " + economy.getName() + " v" + economy.getVersion());
+
+        adManager = new AdManager(this, configManager, economy);
         adManager.loadData();
 
         AdCommands adCommands = new AdCommands(this, adManager, configManager);
@@ -73,4 +86,6 @@ public class billboard extends JavaPlugin {
     public AutoBroadcaster getAutobroadcaster() {
         return autobroadcaster;
     }
+
+    public Method getEconomy() {return economy;}
 }

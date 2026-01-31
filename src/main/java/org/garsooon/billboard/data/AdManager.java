@@ -2,7 +2,9 @@ package org.garsooon.billboard.data;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.garsooon.billboard.Economy.Method;
 import org.garsooon.billboard.billboard;
 import org.garsooon.billboard.data.ActiveAd;
 import org.garsooon.billboard.data.AdRequest;
@@ -21,9 +23,13 @@ public class AdManager {
     private List<ActiveAd> activeAds;
     private Random random;
     private File dataFile;
+    private final Method economy;
+    private final billboard plugin;
 
-    public AdManager(billboard plugin, ConfigManager configManager) {
+    public AdManager(billboard plugin, ConfigManager configManager, Method economy) {
+        this.plugin = plugin;
         this.configManager = configManager;
+        this.economy = economy;
         this.pendingAds = new LinkedList<>();
         this.activeAds = new ArrayList<>();
         this.random = new Random();
@@ -114,6 +120,20 @@ public class AdManager {
         return activeAds;
     }
 
+    public boolean submitAd(Player player, String message, int durationDays) {
+        double totalCost = configManager.getCostPerDay() * durationDays;
+        World world = player.getWorld();
+
+        if (!economy.hasEnough(player.getName(), totalCost, world)) {
+            return false;
+        }
+
+        economy.withdrawPlayer(player.getName(), totalCost, world);
+        pendingAds.add(new AdRequest(player.getName(), message, durationDays));
+        saveData();
+        return true;
+    }
+
     public void approveAd(AdRequest request) {
         pendingAds.remove(request);
         ActiveAd activeAd = new ActiveAd(request.getPlayerName(), request.getMessage(), request.getDurationDays());
@@ -122,6 +142,11 @@ public class AdManager {
     }
 
     public void denyAd(AdRequest request) {
+        double refund = configManager.getCostPerDay() * request.getDurationDays();
+
+        World world = plugin.getServer().getWorlds().get(0);
+        economy.depositPlayer(request.getPlayerName(), refund, world);
+
         pendingAds.remove(request);
         saveData();
     }

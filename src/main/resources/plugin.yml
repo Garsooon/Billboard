@@ -2,6 +2,8 @@ name: Billboard
 version: 1.1
 author: Garsooon
 main: org.garsooon.billboard.billboard
+softdepend: [Essentials, Fundamentals, ZCore]
+
 commands:
   buyad:
     description: Request an ad slot
@@ -18,6 +20,7 @@ commands:
   listads:
     description: List active ads
     permission: billboard.moderate
+
 permissions:
   billboard.moderate:
     description: Allows moderating ads

@@ -20,6 +20,7 @@ public class ConfigManager {
     private String broadcastHeader = "&6[AD]";
     private int maxDurationDays = 30;
     private int maxMessageLength = 100;
+    private double costPerDay = 25.0;
 
     // AutoBroadcaster settings
     private int autobroadcastInterval = 300;
@@ -54,6 +55,7 @@ public class ConfigManager {
         broadcastHeader = getString(broadcastHeader);
         maxDurationDays = getInt("max-duration-days", maxDurationDays);
         maxMessageLength = getInt("max-message-length", maxMessageLength);
+        costPerDay = getDouble(costPerDay);
 
         autobroadcastInterval = getInt("autobroadcast.interval", autobroadcastInterval);
         autobroadcastMessages = getStringList(getDefaultAutobroadcastMessages());
@@ -66,6 +68,7 @@ public class ConfigManager {
         config.put("broadcast-header", broadcastHeader);
         config.put("max-duration-days", maxDurationDays);
         config.put("max-message-length", maxMessageLength);
+        config.put("cost-per-day", costPerDay);
 
         Map<String, Object> autobroadcast = new HashMap<>();
         autobroadcast.put("interval", autobroadcastInterval);
@@ -190,4 +193,16 @@ public class ConfigManager {
             e.printStackTrace();
         }
     }
+
+    private double getDouble(double defaultValue) {
+        if (config.containsKey("cost-per-day")) {
+            Object val = config.get("cost-per-day");
+            if (val instanceof Number) {
+                return ((Number) val).doubleValue();
+            }
+        }
+        return defaultValue;
+    }
+
+    public double getCostPerDay() {return costPerDay; }
 }
