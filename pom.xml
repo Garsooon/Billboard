@@ -47,6 +47,37 @@
             <artifactId>poseidon-craftbukkit</artifactId>
             <version>1.1.8</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.earth2me</groupId>
+            <artifactId>essentials</artifactId>
+            <version>2.6.8</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/essentials.jar</systemPath>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.nijikokun.bukkit</groupId>
+            <artifactId>Permissions</artifactId>
+            <version>2.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/Permissions.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.johnymuffin.beta</groupId>
+            <artifactId>fundamentals</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>me.zavdav</groupId>
+            <artifactId>ZCore</artifactId>
+            <version>0.22.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ZCore.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
