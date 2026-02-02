@@ -4,7 +4,7 @@
 [![Downloads](https://img.shields.io/github/downloads/Garsooon/Billboard/total.svg?style=flat)](https://github.com/Garsooon/Billboard/releases)  
 [![GitHub Stars](https://img.shields.io/github/stars/Garsooon/Billboard?style=social)](https://github.com/Garsooon/Billboard/stargazers)
 
-**Billboard** is a simple chat-based advertisement plugin for Minecraft Beta 1.7.3.
+**Billboard** is a simple Autobroadcaster & chat-based advertisement plugin for Minecraft Beta 1.7.3.
 
 ---
 
@@ -47,6 +47,7 @@ The config file (`plugins/Billboard/config.yml`) lets you adjust:
 - Broadcasting interval
 - Max message length
 - Max days
+- Ad Cost per day
 
 ---
 
