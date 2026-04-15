@@ -32,7 +32,6 @@ public class Methods {
      */
     public static void _init() {
         addMethod("Essentials", new EE17 ());
-        addMethod("ZCore", new ZCoreEco ());
     }
 
     public static void setVersion(String v) {
