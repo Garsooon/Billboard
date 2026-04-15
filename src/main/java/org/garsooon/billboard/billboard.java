@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.garsooon.billboard.Economy.Method;
 import org.garsooon.billboard.Economy.Methods;
 import org.garsooon.billboard.commands.AdCommands;
+import org.garsooon.billboard.commands.BroadcastCommands;
 import org.garsooon.billboard.data.AdManager;
 import org.garsooon.billboard.data.AutoBroadcaster;
 import org.garsooon.billboard.data.ConfigManager;
@@ -60,6 +61,8 @@ public class billboard extends JavaPlugin {
         // Start broadcast task for server broadcasts
         autobroadcaster = new AutoBroadcaster(this, configManager);
         autobroadcaster.start();
+
+        getCommand("broadcast").setExecutor(new BroadcastCommands(autobroadcaster));
     }
 
     @Override

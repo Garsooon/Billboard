@@ -158,6 +158,48 @@ public class AutoBroadcaster {
         return messages.size();
     }
 
+    public void addMessage(String message) {
+        messages.add(message);
+        saveBroadcasts();
+    }
+
+    public boolean removeMessage(int index) {
+        if (index < 0 || index >= messages.size()) {
+            return false;
+        }
+        messages.remove(index);
+        if (currentMessageIndex >= messages.size() && currentMessageIndex > 0) {
+            currentMessageIndex = 0;
+        }
+        saveBroadcasts();
+        return true;
+    }
+
+    public void saveBroadcasts() {
+        try {
+            Yaml yaml = new Yaml();
+            FileInputStream fis = new FileInputStream(broadcastFile);
+            Object loadedObj = yaml.load(fis);
+            fis.close();
+
+            int interval = 300;
+            if (loadedObj instanceof Map) {
+                Map<String, Object> data = (Map<String, Object>) loadedObj;
+                if (data.containsKey("interval") && data.get("interval") instanceof Number) {
+                    interval = ((Number) data.get("interval")).intValue();
+                }
+            }
+
+            Map<String, Object> newData = new HashMap<>();
+            newData.put("interval", interval);
+            newData.put("messages", new ArrayList<>(messages));
+            saveYamlFile(broadcastFile, newData);
+        } catch (IOException e) {
+            plugin.getServer().getLogger().severe("[Billboard] Could not save broadcasts.yml!");
+            e.printStackTrace();
+        }
+    }
+
     private int getIntervalFromFile() {
         try {
             Yaml yaml = new Yaml();

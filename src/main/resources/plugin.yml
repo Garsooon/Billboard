@@ -1,5 +1,5 @@
 name: Billboard
-version: 1.2
+version: 1.0.3
 author: Garsooon
 main: org.garsooon.billboard.billboard
 softdepend: [Essentials, Fundamentals, ZCore]
@@ -20,8 +20,15 @@ commands:
   listads:
     description: List active ads
     permission: billboard.moderate
+  broadcast:
+    description: Manage server broadcasts
+    usage: /<command> <list|add|remove|reload>
+    permission: billboard.broadcasts
 
 permissions:
   billboard.moderate:
     description: Allows moderating ads
+    default: op
+  billboard.broadcasts:
+    description: Allows managing server broadcasts in-game
     default: op
